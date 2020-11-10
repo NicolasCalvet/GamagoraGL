@@ -21,6 +21,8 @@ UNCOMMENT when you'll start using tinyply.
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+int width, height;
+
 static void error_callback(int /*error*/, const char* description)
 {
 	std::cerr << "Error: " << description << std::endl;
@@ -145,14 +147,18 @@ bool IsOutsideScreen(glm::vec3 pos) {
 	return pos.y < -1.0f || pos.x < -1.0f ||pos.x > 1.0f;
 }
 
-void ApplyGravity(std::vector<Particule> &particules) {
+glm::vec3 ScreenCoordinatesToWorldCoordinates(double &xpos, double &ypos) {
+	return glm::vec3(xpos / width * 2.0f - 1.0f, (ypos / height * 2.0f - 1.0f) * -1.0f, 1.0f);
+}
+
+void ApplyGravity(std::vector<Particule> &particules, double &xpos, double &ypos) {
 
 	for (auto &particle : particules)
 	{
 
 		if (IsOutsideScreen(particle.position)) {
-			particle.position.x = 0.0f;
-			particle.position.y = 0.5f;
+			particle.position = ScreenCoordinatesToWorldCoordinates(xpos, ypos);
+			particle.speed = glm::vec3(0.0f, 0.0f, 0.0f);
 		}
 
 		//Compute acceleration
@@ -201,7 +207,7 @@ int main(void)
 	// Callbacks
 	glDebugMessageCallback(opengl_error_callback, nullptr);
 
-	const size_t nParticules = 10;
+	const size_t nParticules = 1000;
 	auto particules = MakeParticules(nParticules);
 
 	// Shader
@@ -251,18 +257,15 @@ int main(void)
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
 
 
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
 
-		ApplyGravity(particules);
+		ApplyGravity(particules, xpos, ypos);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, nParticules * sizeof(Particule), particules.data());
-
-
-		//double xpos, ypos;
-		//glfwGetCursorPos(window, &xpos, &ypos);
 
 		
 
