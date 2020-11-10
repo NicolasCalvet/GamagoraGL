@@ -42,11 +42,12 @@ struct Particule {
 	float size;
 };
 
+std::default_random_engine generator;
+std::uniform_real_distribution<float> distribution01(0, 1);
+std::uniform_real_distribution<float> distributionWorld(-1, 1);
+
 std::vector<Particule> MakeParticules(const int n)
 {
-	std::default_random_engine generator;
-	std::uniform_real_distribution<float> distribution01(0, 1);
-	std::uniform_real_distribution<float> distributionWorld(-1, 1);
 
 	std::vector<Particule> p;
 	p.reserve(n);
@@ -158,7 +159,7 @@ void ApplyGravity(std::vector<Particule> &particules, double &xpos, double &ypos
 
 		if (IsOutsideScreen(particle.position)) {
 			particle.position = ScreenCoordinatesToWorldCoordinates(xpos, ypos);
-			particle.speed = glm::vec3(0.0f, 0.0f, 0.0f);
+			particle.speed = glm::vec3(distribution01(generator) * -1.0f, distribution01(generator) * -1.0f, 0.0f) * 5.0f;
 		}
 
 		//Compute acceleration
