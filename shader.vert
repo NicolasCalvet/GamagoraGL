@@ -11,10 +11,9 @@ out vec3 particle_color;
 
 void main()
 {
-    gl_Position = vec4(position, 1.0);
-    // gl_Position = vec4(position * sin(time), 1.0);
+    gl_Position = vec4(position.x * sin(time), position.y * cos(time), position.z, 1.0);
 
-    gl_PointSize = 40 * pointSize;
+    gl_PointSize = pointSize;
     
     particle_color = color;
 }

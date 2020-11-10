@@ -59,7 +59,7 @@ std::vector<Particule> MakeParticules(const int n)
 				distribution01(generator)
 				},
 				{0.f, 0.f, 0.f},
-				distribution01(generator)
+				40.0f * distribution01(generator)
 				});
 	}
 
@@ -191,17 +191,17 @@ int main(void)
 	// Bindings
 	//Position
 	const auto index = glGetAttribLocation(program, "position");
-	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), nullptr);
+	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid *>(offsetof(Particule, position)));
 	glEnableVertexAttribArray(index);
 
 	//Color
 	const auto index_color = glGetAttribLocation(program, "color");
-	glVertexAttribPointer(index_color, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), (void*)sizeof(glm::vec3));
+	glVertexAttribPointer(index_color, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid *>(offsetof(Particule, color)));
 	glEnableVertexAttribArray(index_color);
 
 	//Pointsize
 	const auto index_pointSize = glGetAttribLocation(program, "pointSize");
-	glVertexAttribPointer(index_pointSize, 1, GL_FLOAT, GL_FALSE, sizeof(Particule), (void *)(3 * sizeof(glm::vec3)));
+	glVertexAttribPointer(index_pointSize, 1, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid *>(offsetof(Particule, size)));
 	glEnableVertexAttribArray(index_pointSize);
 
 
