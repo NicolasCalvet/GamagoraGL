@@ -144,7 +144,7 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
-	window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+	window = glfwCreateWindow(1920, 1080, "Simple example", NULL, NULL);
 
 	if (!window)
 	{
@@ -184,7 +184,7 @@ int main(void)
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_DYNAMIC_DRAW);
 
 	// Bindings
 	const auto index = glGetAttribLocation(program, "position");
@@ -192,7 +192,7 @@ int main(void)
 	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), nullptr);
 	glEnableVertexAttribArray(index);
 
-	glPointSize(20.f);
+	glPointSize(10.f);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -201,8 +201,8 @@ int main(void)
 
 		glViewport(0, 0, width, height);
 
+		glClearColor(0.8f, 0.2f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		// glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
 		glDrawArrays(GL_POINTS, 0, nParticules);
 
