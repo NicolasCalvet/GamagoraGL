@@ -9,5 +9,6 @@ out vec4 color;
 
 void main()
 {
-    color = max(vec4((sin(time) + 1.f) / 2.f * particle_color, 0.f), vec4(0.2f * particle_color, 0.f));
+    // color = vec4((sin(time * 10) + 1.0f) / 2.0f * particle_color, 1.0f);
+    color = vec4(particle_color, 1.0f);
 }

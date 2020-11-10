@@ -146,7 +146,7 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
-	window = glfwCreateWindow(1920, 1080, "Simple example", NULL, NULL);
+	window = glfwCreateWindow(1000, 1000, "Simple example", NULL, NULL);
 
 	if (!window)
 	{
@@ -167,7 +167,7 @@ int main(void)
 	// Callbacks
 	glDebugMessageCallback(opengl_error_callback, nullptr);
 
-	const size_t nParticules = 1000;
+	const size_t nParticules = 30000;
 	const auto particules = MakeParticules(nParticules);
 
 	// Shader
@@ -186,7 +186,7 @@ int main(void)
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_STATIC_DRAW);
 
 	// Bindings
 	//Position
@@ -210,12 +210,22 @@ int main(void)
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glUniform1f(glGetUniformLocation(program, "time"), glfwGetTime());
-
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 
 		glViewport(0, 0, width, height);
+
+		//Time
+		glUniform1f(glGetUniformLocation(program, "time"), glfwGetTime());
+
+		//Mouse position
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		glUniform1f(glGetUniformLocation(program, "mouseX"), xpos/width);
+
+		//Colors
+		glUniform3f(glGetUniformLocation(program, "colorA"), 0.5f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(program, "colorB"), 0.17f, 0.45f, 1.0f);
 
 		//glClearColor(0.8f, 0.2f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -227,5 +237,8 @@ int main(void)
 	}
 	glfwDestroyWindow(window);
 	glfwTerminate();
+
+	system("pause");
+
 	exit(EXIT_SUCCESS);
 }
