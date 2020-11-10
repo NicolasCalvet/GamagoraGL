@@ -33,6 +33,7 @@ struct Particule {
 	glm::vec3 position;
 	glm::vec3 color;
 	glm::vec3 speed;
+	float size;
 };
 
 std::vector<Particule> MakeParticules(const int n)
@@ -57,7 +58,8 @@ std::vector<Particule> MakeParticules(const int n)
 				distribution01(generator),
 				distribution01(generator)
 				},
-				{0.f, 0.f, 0.f}
+				{0.f, 0.f, 0.f},
+				distribution01(generator)
 				});
 	}
 
@@ -197,11 +199,19 @@ int main(void)
 	glVertexAttribPointer(index_color, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), (void*)sizeof(glm::vec3));
 	glEnableVertexAttribArray(index_color);
 
+	//Pointsize
+	const auto index_pointSize = glGetAttribLocation(program, "pointSize");
+	glVertexAttribPointer(index_pointSize, 1, GL_FLOAT, GL_FALSE, sizeof(Particule), (void *)(3 * sizeof(glm::vec3)));
+	glEnableVertexAttribArray(index_pointSize);
+
 
 	glPointSize(10.f);
+	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	while (!glfwWindowShouldClose(window))
 	{
+		glUniform1f(glGetUniformLocation(program, "time"), glfwGetTime());
+
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 
