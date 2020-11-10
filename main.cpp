@@ -8,6 +8,12 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include "stl.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 #define TINYPLY_IMPLEMENTATION
 #include <tinyply.h>
@@ -177,29 +183,42 @@ int main(void)
 	glGenBuffers(1, &vbo);
 	glGenVertexArrays(1, &vao);
 
+	const auto tris = ReadStl("logo.stl");
+	std::cout << tris.size() << std::endl;
+	const auto nTriangles = tris.size();
+
+
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, nTriangles * sizeof(Triangle), tris.data(), GL_STATIC_DRAW);
 
 	// Bindings
 	const auto index = glGetAttribLocation(program, "position");
 
-	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), nullptr);
+	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Triangle) / 3, nullptr);
 	glEnableVertexAttribArray(index);
 
-	glPointSize(20.f);
+	// glPointSize(20.f);
+	//
+	glEnable(GL_DEPTH_TEST);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 
+		float t = glfwGetTime();
+
+		glm::mat4 trans = glm::mat4(1.0f);
+		trans = glm::rotate(trans, glm::radians(t * 50), glm::vec3(0.0f, 1.0f, 1.0f));
+
+		glUniformMatrix4fv(0, 1, GL_FALSE, &trans[0][0]);
+
 		glViewport(0, 0, width, height);
 
-		glClear(GL_COLOR_BUFFER_BIT);
-		// glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glDrawArrays(GL_POINTS, 0, nParticules);
+		glDrawArrays(GL_TRIANGLES, 0, nTriangles * 3);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
