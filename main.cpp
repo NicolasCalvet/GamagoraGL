@@ -17,6 +17,10 @@ UNCOMMENT when you'll start using tinyply.
 #include <tinyply.h>
 */
 
+// timing
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
 static void error_callback(int /*error*/, const char* description)
 {
 	std::cerr << "Error: " << description << std::endl;
@@ -59,7 +63,7 @@ std::vector<Particule> MakeParticules(const int n)
 				distribution01(generator)
 				},
 				{0.f, 0.f, 0.f},
-				40.0f * distribution01(generator)
+				20.0f * distribution01(generator)
 				});
 	}
 
@@ -134,6 +138,27 @@ void APIENTRY opengl_error_callback(GLenum /* source */,
 	std::cout << message << std::endl;
 }
 
+static const float g = 9.8; //m.s-2
+static const glm::vec3 gravityDirection(0.0f, 1.0f, 0.0f);
+
+void ApplyGravity(std::vector<Particule> &particules) {
+
+	for (auto &particle : particules)
+	{
+
+		//Compute acceleration
+		glm::vec3 acceleration = (-particle.size * g * gravityDirection - particle.speed) / particle.size;
+
+		//Compute next speed & position
+		glm::vec3 nextSpeed = particle.speed + acceleration * deltaTime;
+		glm::vec3 nextPosition = particle.position + particle.speed * deltaTime;
+
+		particle.speed = nextSpeed;
+		particle.position = nextPosition;
+	}
+
+}
+
 int main(void)
 {
 	GLFWwindow* window;
@@ -167,15 +192,15 @@ int main(void)
 	// Callbacks
 	glDebugMessageCallback(opengl_error_callback, nullptr);
 
-	const size_t nParticules = 30000;
-	const auto particules = MakeParticules(nParticules);
+	const size_t nParticules = 10;
+	auto particules = MakeParticules(nParticules);
 
 	// Shader
-	const auto vertex = MakeShader(GL_VERTEX_SHADER, "shader.vert");
-	const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shader.frag");
+	//const auto vertex = MakeShader(GL_VERTEX_SHADER, "shader.vert");
+	//const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shader.frag");
 
-	//const auto vertex = MakeShader(GL_VERTEX_SHADER, "shaderGravity.vert");
-	//const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shaderGravity.frag");
+	const auto vertex = MakeShader(GL_VERTEX_SHADER, "shaderGravity.vert");
+	const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shaderGravity.frag");
 
 	const auto program = AttachAndLink({vertex, fragment});
 
@@ -189,7 +214,7 @@ int main(void)
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_DYNAMIC_DRAW);
 
 	// Bindings
 	//Position
@@ -213,35 +238,60 @@ int main(void)
 
 	while (!glfwWindowShouldClose(window))
 	{
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
-
 		glViewport(0, 0, width, height);
 
+
+
+		ApplyGravity(particules);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, nParticules * sizeof(Particule), particules.data());
+
+
+		//double xpos, ypos;
+		//glfwGetCursorPos(window, &xpos, &ypos);
+
+		
+
+
+		///* For shader.XXXX */
+		////Time
+		//glUniform1f(glGetUniformLocation(program, "time"), glfwGetTime());
+
+		////Mouse position
+		//double xpos, ypos;
+		//glfwGetCursorPos(window, &xpos, &ypos);
+		//glUniform2f(glGetUniformLocation(program, "mouse_position"), xpos/width, ypos/height);
+
+		////Colors
+		//glUniform3f(glGetUniformLocation(program, "colorA"), 0.5f, 1.0f, 0.0f);
+		//glUniform3f(glGetUniformLocation(program, "colorB"), 0.17f, 0.45f, 1.0f);
+
+
+		/* For shaderGravity.XXXX */
 		//Time
 		glUniform1f(glGetUniformLocation(program, "time"), glfwGetTime());
 
-		//Mouse position
-		double xpos, ypos;
-		glfwGetCursorPos(window, &xpos, &ypos);
-		glUniform2f(glGetUniformLocation(program, "mouse_position"), xpos/width, ypos/height);
 
-		//Colors
-		glUniform3f(glGetUniformLocation(program, "colorA"), 0.5f, 1.0f, 0.0f);
-		glUniform3f(glGetUniformLocation(program, "colorB"), 0.17f, 0.45f, 1.0f);
 
-		//glClearColor(0.8f, 0.2f, 0.5f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glDrawArrays(GL_POINTS, 0, nParticules);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
 	glfwDestroyWindow(window);
 	glfwTerminate();
 
-	system("pause");
+	//system("pause");
 
 	exit(EXIT_SUCCESS);
 }
