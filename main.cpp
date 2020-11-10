@@ -141,10 +141,19 @@ void APIENTRY opengl_error_callback(GLenum /* source */,
 static const float g = 3.711; //m.s-2
 static const glm::vec3 gravityDirection(0.0f, 1.0f, 0.0f);
 
+bool IsOutsideScreen(glm::vec3 pos) {
+	return pos.y < -1.0f || pos.x < -1.0f ||pos.x > 1.0f;
+}
+
 void ApplyGravity(std::vector<Particule> &particules) {
 
 	for (auto &particle : particules)
 	{
+
+		if (IsOutsideScreen(particle.position)) {
+			particle.position.x = 0.0f;
+			particle.position.y = 0.5f;
+		}
 
 		//Compute acceleration
 		glm::vec3 acceleration = (-particle.size * g * gravityDirection - particle.speed) / particle.size;
@@ -171,7 +180,7 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
-	window = glfwCreateWindow(1000, 1000, "Simple example", NULL, NULL);
+	window = glfwCreateWindow(1200, 1200, "Simple example", NULL, NULL);
 
 	if (!window)
 	{
