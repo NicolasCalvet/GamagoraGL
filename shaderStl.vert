@@ -1,5 +1,7 @@
 #version 450
 
+uniform mat4 trans;
+
 in vec3 position;
 
 out vec3 particle_color;
@@ -7,7 +9,7 @@ out vec3 particle_color;
 void main()
 {
 
-    vec3 position_temp = position / 50.0f;
+    vec3 position_temp = position * 0.02f;
 
     gl_Position = vec4(position_temp, 1.0);
     

@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/vec3.hpp>
+
+#include <glm/glm.hpp>
 
 #include <vector>
 #include <iostream>
@@ -239,6 +240,7 @@ int main(void)
 	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(index);
 
+	glEnable(GL_DEPTH_TEST);
 
 	glPointSize(10.f);
 	glEnable(GL_PROGRAM_POINT_SIZE);
@@ -254,6 +256,21 @@ int main(void)
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+		auto look = glm::lookAt(
+			glm::vec3(100 * sin(t), 100 * cos(t), 100),
+			glm::vec3(0, 0, 0),
+			glm::vec3(0, 1, 0));
+
+		auto p = glm::perspective(glm::radians(45.f), ((float)width) / height, 1.f, 1000.f);
+
+		// trans = glm::rotate(trans, glm::radians(t * 50), glm::vec3(0.0f, 1.0f, 1.0f));
+
+		glUniformMatrix4fv(glGetUniformLocation(program, "look"), 1, GL_FALSE, glm::value_ptr(look));
+		glUniformMatrix4fv(glGetUniformLocation(program, "p"), 1, GL_FALSE, glm::value_ptr(p));
+
+
 
 		glDrawArrays(GL_TRIANGLES, 0, stlMesh.size() * 3);
 
