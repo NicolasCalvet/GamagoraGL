@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
 #include <iostream>
@@ -259,7 +261,7 @@ int main(void)
 
 
 		auto look = glm::lookAt(
-			glm::vec3(100 * sin(t), 100 * cos(t), 100),
+			glm::vec3(100 * sin(currentFrame), 100 * cos(currentFrame), 100),
 			glm::vec3(0, 0, 0),
 			glm::vec3(0, 1, 0));
 
