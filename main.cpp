@@ -138,7 +138,7 @@ void APIENTRY opengl_error_callback(GLenum /* source */,
 	std::cout << message << std::endl;
 }
 
-static const float g = 9.8; //m.s-2
+static const float g = 3.711; //m.s-2
 static const glm::vec3 gravityDirection(0.0f, 1.0f, 0.0f);
 
 void ApplyGravity(std::vector<Particule> &particules) {
