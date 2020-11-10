@@ -17,6 +17,9 @@ UNCOMMENT when you'll start using tinyply.
 #include <tinyply.h>
 */
 
+#include "stl.h"
+
+
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -208,15 +211,13 @@ int main(void)
 	// Callbacks
 	glDebugMessageCallback(opengl_error_callback, nullptr);
 
-	const size_t nParticules = 1000;
-	auto particules = MakeParticules(nParticules);
+
+	const auto stlMesh = ReadStl("logo.stl");
+
 
 	// Shader
-	//const auto vertex = MakeShader(GL_VERTEX_SHADER, "shader.vert");
-	//const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shader.frag");
-
-	const auto vertex = MakeShader(GL_VERTEX_SHADER, "shaderGravity.vert");
-	const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shaderGravity.frag");
+	const auto vertex = MakeShader(GL_VERTEX_SHADER, "shaderStl.vert");
+	const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shaderStl.frag");
 
 	const auto program = AttachAndLink({vertex, fragment});
 
@@ -230,23 +231,13 @@ int main(void)
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, stlMesh.size() * sizeof(Triangle), stlMesh.data(), GL_DYNAMIC_DRAW);
 
 	// Bindings
 	//Position
 	const auto index = glGetAttribLocation(program, "position");
-	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid *>(offsetof(Particule, position)));
+	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(index);
-
-	//Color
-	const auto index_color = glGetAttribLocation(program, "color");
-	glVertexAttribPointer(index_color, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid *>(offsetof(Particule, color)));
-	glEnableVertexAttribArray(index_color);
-
-	//Pointsize
-	const auto index_pointSize = glGetAttribLocation(program, "pointSize");
-	glVertexAttribPointer(index_pointSize, 1, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid *>(offsetof(Particule, size)));
-	glEnableVertexAttribArray(index_pointSize);
 
 
 	glPointSize(10.f);
@@ -261,41 +252,10 @@ int main(void)
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
 
-
-		double xpos, ypos;
-		glfwGetCursorPos(window, &xpos, &ypos);
-
-		ApplyGravity(particules, xpos, ypos);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, nParticules * sizeof(Particule), particules.data());
-
-		
-
-
-		///* For shader.XXXX */
-		////Time
-		//glUniform1f(glGetUniformLocation(program, "time"), glfwGetTime());
-
-		////Mouse position
-		//double xpos, ypos;
-		//glfwGetCursorPos(window, &xpos, &ypos);
-		//glUniform2f(glGetUniformLocation(program, "mouse_position"), xpos/width, ypos/height);
-
-		////Colors
-		//glUniform3f(glGetUniformLocation(program, "colorA"), 0.5f, 1.0f, 0.0f);
-		//glUniform3f(glGetUniformLocation(program, "colorB"), 0.17f, 0.45f, 1.0f);
-
-
-		/* For shaderGravity.XXXX */
-		//Time
-		glUniform1f(glGetUniformLocation(program, "time"), glfwGetTime());
-
-
-
-
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glDrawArrays(GL_POINTS, 0, nParticules);
+		glDrawArrays(GL_TRIANGLES, 0, stlMesh.size() * 3);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
