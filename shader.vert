@@ -3,7 +3,7 @@
 uniform float time;
 uniform vec3 colorA;
 uniform vec3 colorB;
-uniform float mouseX;
+uniform vec2 mouse_position;
 
 in vec3 position;
 in vec3 color;
@@ -16,7 +16,7 @@ void main()
 {
 
     float r = length(position.xy);
-    float time_temp = mouseX;
+    float time_temp = length(mouse_position);
     float speed = 10.f;
 
     gl_PointSize = r * 20;

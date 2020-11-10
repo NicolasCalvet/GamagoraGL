@@ -174,6 +174,9 @@ int main(void)
 	const auto vertex = MakeShader(GL_VERTEX_SHADER, "shader.vert");
 	const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shader.frag");
 
+	//const auto vertex = MakeShader(GL_VERTEX_SHADER, "shaderGravity.vert");
+	//const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shaderGravity.frag");
+
 	const auto program = AttachAndLink({vertex, fragment});
 
 	glUseProgram(program);
@@ -221,7 +224,7 @@ int main(void)
 		//Mouse position
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		glUniform1f(glGetUniformLocation(program, "mouseX"), xpos/width);
+		glUniform2f(glGetUniformLocation(program, "mouse_position"), xpos/width, ypos/height);
 
 		//Colors
 		glUniform3f(glGetUniformLocation(program, "colorA"), 0.5f, 1.0f, 0.0f);
