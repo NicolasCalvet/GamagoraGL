@@ -187,10 +187,16 @@ int main(void)
 	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_DYNAMIC_DRAW);
 
 	// Bindings
+	//Position
 	const auto index = glGetAttribLocation(program, "position");
-
 	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), nullptr);
 	glEnableVertexAttribArray(index);
+
+	//Color
+	const auto index_color = glGetAttribLocation(program, "color");
+	glVertexAttribPointer(index_color, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), (void*)sizeof(glm::vec3));
+	glEnableVertexAttribArray(index_color);
+
 
 	glPointSize(10.f);
 
@@ -201,7 +207,7 @@ int main(void)
 
 		glViewport(0, 0, width, height);
 
-		glClearColor(0.8f, 0.2f, 0.5f, 1.0f);
+		//glClearColor(0.8f, 0.2f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glDrawArrays(GL_POINTS, 0, nParticules);
