@@ -15,91 +15,115 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="external\glad\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stl.cpp">
+    <ClCompile Include="source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="texture.cpp">
+    <ClCompile Include="source\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glad\src\glad.c">
+    <ClCompile Include="source\stl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stl.h">
+    <ClInclude Include="external\cimg\include\CImg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="texture.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\add_fileformat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\CImg.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\bayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\add_fileformat.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\chlpca.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\bayer.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\cvMat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\chlpca.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\draw_gradient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\cvMat.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\inpaint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\draw_gradient.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\ipl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\inpaint.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\ipl_alt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\ipl.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\jpeg_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\ipl_alt.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\loop_macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\jpeg_buffer.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\matlab.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\loop_macros.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\nlmeans.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\matlab.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\skeleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\nlmeans.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\tiff_stream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\skeleton.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\tinymatwriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\tiff_stream.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\vrml.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\tinymatwriter.h">
+    <ClInclude Include="external\cimg\include\cimg\plugins\vtk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\vrml.h">
+    <ClInclude Include="external\glad\include\glad\glad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cimg\include\cimg\plugins\vtk.h">
+    <ClInclude Include="external\glad\include\khr\khrplatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="glad\include\glad\glad.h">
+    <ClInclude Include="external\tinyply\include\tinyply.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="glad\include\khr\khrplatform.h">
+    <ClInclude Include="source\shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tinyply\include\tinyply.h">
+    <ClInclude Include="source\stl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="resources\shaders\shader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\shader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\shaderGravity.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\shaderGravity.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\shaderStl.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\shaderStl.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

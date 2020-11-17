@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{43CBDB0D-3064-4AAA-A12C-76F14CF7F7CD}</ProjectGuid>
+    <ProjectGuid>{8426EE80-B434-446F-8CD8-598F42BE63F6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -64,13 +64,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Cours\Gamagora\GamagoraGL\tinyply\include;D:\Cours\Gamagora\GamagoraGL\CImg\include;D:\Cours\Gamagora\GamagoraGL\glad\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Cours\Gamagora\GamagoraGL\external\tinyply\include;D:\Cours\Gamagora\GamagoraGL\external\glad\include;D:\Cours\Gamagora\GamagoraGL\external\CImg\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\Cours\Gamagora\GamagoraGL\external\tinyply\include;D:\Cours\Gamagora\GamagoraGL\external\glad\include;D:\Cours\Gamagora\GamagoraGL\external\CImg\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Cours\Gamagora\GamagoraGL\tinyply\include;D:\Cours\Gamagora\GamagoraGL\CImg\include;D:\Cours\Gamagora\GamagoraGL\glad\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Cours\Gamagora\GamagoraGL\external\tinyply\include;D:\Cours\Gamagora\GamagoraGL\external\glad\include;D:\Cours\Gamagora\GamagoraGL\external\CImg\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\Cours\Gamagora\GamagoraGL\external\tinyply\include;D:\Cours\Gamagora\GamagoraGL\external\glad\include;D:\Cours\Gamagora\GamagoraGL\external\CImg\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -102,38 +106,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="glad\src\glad.c" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="stl.cpp" />
-    <ClCompile Include="texture.cpp" />
+    <ClCompile Include="external\glad\src\glad.c" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\shader.cpp" />
+    <ClCompile Include="source\stl.cpp" />
+    <ClCompile Include="source\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cimg\include\CImg.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\add_fileformat.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\bayer.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\chlpca.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\cvMat.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\draw_gradient.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\inpaint.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\ipl.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\ipl_alt.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\jpeg_buffer.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\loop_macros.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\matlab.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\nlmeans.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\skeleton.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\tiff_stream.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\tinymatwriter.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\vrml.h" />
-    <ClInclude Include="cimg\include\cimg\plugins\vtk.h" />
-    <ClInclude Include="glad\include\glad\glad.h" />
-    <ClInclude Include="glad\include\khr\khrplatform.h" />
-    <ClInclude Include="stl.h" />
-    <ClInclude Include="texture.h" />
-    <ClInclude Include="tinyply\include\tinyply.h" />
+    <ClInclude Include="external\cimg\include\CImg.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\add_fileformat.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\bayer.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\chlpca.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\cvMat.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\draw_gradient.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\inpaint.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\ipl.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\ipl_alt.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\jpeg_buffer.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\loop_macros.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\matlab.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\nlmeans.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\skeleton.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\tiff_stream.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\tinymatwriter.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\vrml.h" />
+    <ClInclude Include="external\cimg\include\cimg\plugins\vtk.h" />
+    <ClInclude Include="external\glad\include\glad\glad.h" />
+    <ClInclude Include="external\glad\include\khr\khrplatform.h" />
+    <ClInclude Include="external\tinyply\include\tinyply.h" />
+    <ClInclude Include="source\shader.h" />
+    <ClInclude Include="source\stl.h" />
+    <ClInclude Include="source\texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="resources\shaders\shader.frag" />
+    <None Include="resources\shaders\shader.vert" />
+    <None Include="resources\shaders\shaderGravity.frag" />
+    <None Include="resources\shaders\shaderGravity.vert" />
+    <None Include="resources\shaders\shaderStl.frag" />
+    <None Include="resources\shaders\shaderStl.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

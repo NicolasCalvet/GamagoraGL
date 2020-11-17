@@ -1,7 +1,5 @@
 #version 450
 
-uniform mat4 trans;
-
 in vec3 position;
 
 out vec3 particle_color;

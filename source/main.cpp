@@ -101,7 +101,7 @@ glm::vec3 ScreenCoordinatesToWorldCoordinates(double &xpos, double &ypos) {
 	return glm::vec3(xpos / width * 2.0f - 1.0f, (ypos / height * 2.0f - 1.0f) * -1.0f, 1.0f);
 }
 
-void ApplyGravity(std::vector<Particule> &particules, double &xpos, double &ypos) {
+void ApplyGravity(std::vector<Particle> &particules, double &xpos, double &ypos) {
 
 	for (auto &particle : particules)
 	{
@@ -161,7 +161,7 @@ int main(void)
 	//const size_t nParticles = 1000;
 	//const auto particules = MakeParticles(nParticles);
 
-	const auto stlMesh = ReadStl("logo.stl");
+	const auto stlMesh = ReadStl("resources/models/logo.stl");
 
 	// Shader
 	const auto vertex = MakeShader(GL_VERTEX_SHADER, "resources/shaders/shaderStl.vert");
