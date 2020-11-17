@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Resource Files\images">
+      <UniqueIdentifier>{43797b8d-d88a-4fe2-8e19-41e8388ec748}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\models">
+      <UniqueIdentifier>{68df7a94-b771-4099-a4ad-d95ddbd39963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\shaders">
+      <UniqueIdentifier>{546844ce-932c-49c6-8b3f-3979e5309178}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="external\glad\src\glad.c">
@@ -107,23 +116,34 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="resources\shaders\shaderStl.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
     <None Include="resources\shaders\shader.frag">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="resources\shaders\shader.vert">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="resources\shaders\shaderGravity.frag">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="resources\shaders\shaderGravity.vert">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="resources\shaders\shaderStl.frag">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="resources\shaders\shaderStl.vert">
-      <Filter>Resource Files</Filter>
+    <None Include="resources\models\logo.stl">
+      <Filter>Resource Files\models</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\images\tronc.jpg">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="resources\images\wall.jpg">
+      <Filter>Resource Files\images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

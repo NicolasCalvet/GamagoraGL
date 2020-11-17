@@ -15,13 +15,13 @@
 #include "shader.h"
 
 #define TINYPLY_IMPLEMENTATION
-#include <tinyply.h>
+#include "tinyply.h"
 
 #include "stl.h"
 #include "texture.h"
 
-#include "stl.h"
-
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 // timing
 float deltaTime = 0.0f;
@@ -124,6 +124,20 @@ void ApplyGravity(std::vector<Particle> &particules, double &xpos, double &ypos)
 
 }
 
+Image LoadImage(const char *filename) {
+	int width, height, nbComponents;
+	unsigned char *picture = stbi_load(filename, &width, &height, &nbComponents, 0);
+
+	if (!picture)
+	{
+		stbi_image_free(picture);
+		throw std::runtime_error("File not found: " + std::string(filename));
+		exit(EXIT_FAILURE);
+	}
+
+	return { picture, width, height };
+}
+
 int main(void)
 {
 	GLFWwindow* window;
@@ -151,7 +165,7 @@ int main(void)
 
 	if(!gladLoadGL()) {
 		std::cerr << "Something went wrong!" << std::endl;
-		exit(-1);
+		exit(EXIT_FAILURE);
 	}
 
 	// Callbacks
@@ -181,18 +195,25 @@ int main(void)
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	//glBufferData(GL_ARRAY_BUFFER, nParticles * sizeof(Particle), particules.data(), GL_STATIC_DRAW);
 	glBufferData(GL_ARRAY_BUFFER, stlMesh.size() * sizeof(Triangle), stlMesh.data(), GL_DYNAMIC_DRAW);
 
-
+	
 	// Bindings
 	//Position
 	const auto index = glGetAttribLocation(program, "position");
-
-	//glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), nullptr);
 	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
 	glEnableVertexAttribArray(index);
+
+
+	//Texture
+
+	const char *filename = "resources/images/tronc.jpg";
+	Image im = LoadImage(filename);
+	GLuint tex;
+	glCreateTextures(GL_TEXTURE_2D, 1, &tex);
+	glTextureStorage2D(tex, 1, GL_RGB8, im.width, im.height);
+
+
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -210,8 +231,6 @@ int main(void)
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//glDrawArrays(GL_POINTS, 0, nParticles);
 		glDrawArrays(GL_TRIANGLES, 0, stlMesh.size() * 3);
 
 		glfwSwapBuffers(window);

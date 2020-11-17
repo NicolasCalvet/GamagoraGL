@@ -1,17 +1,19 @@
-#include <CImg.h>
+#include<iostream>
+#include<string>
 
 #include "texture.h"
 
-Image LoadImage(const char *filename)
-{
-	cimg_library::CImg<unsigned char> im(filename);
-
-	std::vector<unsigned char> picture;
-	cimg_forXY(im, x, y) {
-		picture.push_back(im(x, im.height() - y - 1, 0, 0));
-		picture.push_back(im(x, im.height() - y - 1, 0, 1));
-		picture.push_back(im(x, im.height() - y - 1, 0, 2));
-	}
-
-	return { picture, im.width(), im.height() };
-}
+//Image LoadImage(const char *filename)
+//{
+//	int width, height, nbComponents;
+//	unsigned char* picture = stbi_load(filename, &width, &height, &nbComponents, 0);
+//
+//	if (!picture)
+//	{
+//		stbi_image_free(picture);
+//		throw std::runtime_error("File not found: " + std::string(filename));
+//		exit(EXIT_FAILURE);
+//	}
+//
+//	return { picture, width, height };
+//}

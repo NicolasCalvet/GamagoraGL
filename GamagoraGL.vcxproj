@@ -71,10 +71,10 @@
     <IncludePath>D:\Cours\Gamagora\GamagoraGL\external\tinyply\include;D:\Cours\Gamagora\GamagoraGL\external\glad\include;D:\Cours\Gamagora\GamagoraGL\external\CImg\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Cours\Gamagora\GamagoraGL\external\tinyply\include;D:\Cours\Gamagora\GamagoraGL\external\glad\include;D:\Cours\Gamagora\GamagoraGL\external\CImg\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Cours\Gamagora\GamagoraGL\external\stb\include;D:\Cours\Gamagora\GamagoraGL\external\tinyply\include;D:\Cours\Gamagora\GamagoraGL\external\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\Cours\Gamagora\GamagoraGL\external\tinyply\include;D:\Cours\Gamagora\GamagoraGL\external\glad\include;D:\Cours\Gamagora\GamagoraGL\external\CImg\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Cours\Gamagora\GamagoraGL\external\stb\include;D:\Cours\Gamagora\GamagoraGL\external\tinyply\include;D:\Cours\Gamagora\GamagoraGL\external\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -140,12 +140,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="resources\models\logo.stl" />
     <None Include="resources\shaders\shader.frag" />
     <None Include="resources\shaders\shader.vert" />
     <None Include="resources\shaders\shaderGravity.frag" />
     <None Include="resources\shaders\shaderGravity.vert" />
     <None Include="resources\shaders\shaderStl.frag" />
     <None Include="resources\shaders\shaderStl.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\images\tronc.jpg" />
+    <Image Include="resources\images\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
