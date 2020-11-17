@@ -12,13 +12,13 @@
 #include <fstream>
 #include <string>
 
-/*
-
-UNCOMMENT when you'll start using tinyply.
+#include "shader.h"
 
 #define TINYPLY_IMPLEMENTATION
 #include <tinyply.h>
-*/
+
+#include "stl.h"
+#include "texture.h"
 
 #include "stl.h"
 
@@ -41,7 +41,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
 }
 
 /* PARTICULES */
-struct Particule {
+struct Particle {
 	glm::vec3 position;
 	glm::vec3 color;
 	glm::vec3 speed;
@@ -52,15 +52,14 @@ std::default_random_engine generator;
 std::uniform_real_distribution<float> distribution01(0, 1);
 std::uniform_real_distribution<float> distributionWorld(-1, 1);
 
-std::vector<Particule> MakeParticules(const int n)
-{
+std::vector<Particle> MakeParticles(const int n) {
 
-	std::vector<Particule> p;
+	std::vector<Particle> p;
 	p.reserve(n);
 
 	for(int i = 0; i < n; i++)
 	{
-		p.push_back(Particule{
+		p.push_back(Particle{
 				{
 				distributionWorld(generator),
 				distributionWorld(generator),
@@ -79,70 +78,14 @@ std::vector<Particule> MakeParticules(const int n)
 	return p;
 }
 
-GLuint MakeShader(GLuint t, std::string path)
-{
-	std::cout << path << std::endl;
-	std::ifstream file(path.c_str(), std::ios::in);
-	std::ostringstream contents;
-	contents << file.rdbuf();
-	file.close();
 
-	const auto content = contents.str();
-	std::cout << content << std::endl;
-
-	const auto s = glCreateShader(t);
-
-	GLint sizes[] = {(GLint) content.size()};
-	const auto data = content.data();
-
-	glShaderSource(s, 1, &data, sizes);
-	glCompileShader(s);
-
-	GLint success;
-	glGetShaderiv(s, GL_COMPILE_STATUS, &success);
-	if(!success)
-	{
-		GLchar infoLog[512];
-		GLsizei l;
-		glGetShaderInfoLog(s, 512, &l, infoLog);
-
-		std::cout << infoLog << std::endl;
-	}
-
-	return s;
-}
-
-GLuint AttachAndLink(std::vector<GLuint> shaders)
-{
-	const auto prg = glCreateProgram();
-	for(const auto s : shaders)
-	{
-		glAttachShader(prg, s);
-	}
-
-	glLinkProgram(prg);
-
-	GLint success;
-	glGetProgramiv(prg, GL_LINK_STATUS, &success);
-	if(!success)
-	{
-		GLchar infoLog[512];
-		GLsizei l;
-		glGetProgramInfoLog(prg, 512, &l, infoLog);
-
-		std::cout << infoLog << std::endl;
-	}
-
-	return prg;
-}
-
-void APIENTRY opengl_error_callback(GLenum /* source */,
-									GLenum /* type */,
-									GLuint /* id */,
-									GLenum /* severity */,
-									GLsizei /* length */,
-									const GLchar *message,
-									const void * /*userParam */)
+void APIENTRY opengl_error_callback(GLenum source,
+		GLenum type,
+		GLuint id,
+		GLenum severity,
+		GLsizei length,
+		const GLchar *message,
+		const void *userParam)
 {
 	std::cout << message << std::endl;
 }
@@ -215,12 +158,15 @@ int main(void)
 	glDebugMessageCallback(opengl_error_callback, nullptr);
 
 
+	//const size_t nParticles = 1000;
+	//const auto particules = MakeParticles(nParticles);
+
 	const auto stlMesh = ReadStl("logo.stl");
 
-
 	// Shader
-	const auto vertex = MakeShader(GL_VERTEX_SHADER, "shaderStl.vert");
-	const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "shaderStl.frag");
+	const auto vertex = MakeShader(GL_VERTEX_SHADER, "resources/shaders/shaderStl.vert");
+	const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "resources/shaders/shaderStl.frag");
+
 
 	const auto program = AttachAndLink({vertex, fragment});
 
@@ -234,12 +180,18 @@ int main(void)
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+	//glBufferData(GL_ARRAY_BUFFER, nParticles * sizeof(Particle), particules.data(), GL_STATIC_DRAW);
 	glBufferData(GL_ARRAY_BUFFER, stlMesh.size() * sizeof(Triangle), stlMesh.data(), GL_DYNAMIC_DRAW);
+
 
 	// Bindings
 	//Position
 	const auto index = glGetAttribLocation(program, "position");
+
+	//glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), nullptr);
 	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
 	glEnableVertexAttribArray(index);
 
 	glEnable(GL_DEPTH_TEST);
@@ -259,21 +211,7 @@ int main(void)
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-		auto look = glm::lookAt(
-			glm::vec3(100 * sin(currentFrame), 100 * cos(currentFrame), 100),
-			glm::vec3(0, 0, 0),
-			glm::vec3(0, 1, 0));
-
-		auto p = glm::perspective(glm::radians(45.f), ((float)width) / height, 1.f, 1000.f);
-
-		// trans = glm::rotate(trans, glm::radians(t * 50), glm::vec3(0.0f, 1.0f, 1.0f));
-
-		glUniformMatrix4fv(glGetUniformLocation(program, "look"), 1, GL_FALSE, glm::value_ptr(look));
-		glUniformMatrix4fv(glGetUniformLocation(program, "p"), 1, GL_FALSE, glm::value_ptr(p));
-
-
-
+		//glDrawArrays(GL_POINTS, 0, nParticles);
 		glDrawArrays(GL_TRIANGLES, 0, stlMesh.size() * 3);
 
 		glfwSwapBuffers(window);

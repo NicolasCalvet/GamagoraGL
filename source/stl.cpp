@@ -37,6 +37,7 @@ std::vector<Triangle> ReadStl(const char * filename)
 	}
 	else
 	{
+		throw std::runtime_error(std::string("Cannot open file: ") + filename);
 		return {};
 	}
 }
