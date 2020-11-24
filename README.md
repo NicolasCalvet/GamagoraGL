@@ -81,11 +81,44 @@ For the next session, have fun with textures. Add many of them. Draw quads, with
 
 Next. We'll see framebuffer indirect rendering and clipping.
 
+
+```cpp
+	// FB
+	GLuint fbo;
+	glCreateFramebuffers(1, &fbo);
+```
+
+```cpp
+	GLuint ct;
+	glCreateTextures(GL_TEXTURE_2D, 1, &ct);
+	glTextureStorage2D(ct, 1, GL_RGB8, im.width, im.height);
+
+	GLuint dt;
+	glCreateTextures(GL_TEXTURE_2D, 1, &dt);
+	glTextureStorage2D(dt, 1, GL_DEPTH_COMPONENT32F, im.width, im.height);
+
+	glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, ct, 0);
+	glNamedFramebufferTexture(fbo, GL_DEPTH_ATTACHMENT, dt, 0);
+```
+
+```cpp
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
+```
+
+This allows the creation of an indirect framebuffer. You will be able to render on a texture.
+
+Carefully check your OpenGL errors.
+
 Applications:
 
-- Mirrors
 - Shadow map
 - Portal
+
+
+## Clipping
+
+
+- Mirrors
 
 # Future sessions
 
