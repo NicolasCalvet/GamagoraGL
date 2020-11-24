@@ -9,7 +9,5 @@ out vec4 color;
 
 void main()
 {
-//    color = texture(tex, TexCoord) * vec4(ourColor, 1.0); 
-//    color = vec4(ourColor, 1.0); 
-    color = texture(tex, TexCoord); 
+    color = texture(tex, TexCoord) * vec4(ourColor, 1.0); 
 }
