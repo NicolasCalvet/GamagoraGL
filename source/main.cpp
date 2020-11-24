@@ -27,7 +27,8 @@
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-int width, height;
+int width = 1200;
+int height = 1200;
 
 static void error_callback(int /*error*/, const char* description)
 {
@@ -195,7 +196,6 @@ int main(void)
 		1, 2, 3  // second triangle
 	};
 
-
 	// Buffers
 	GLuint vao, vbo, ebo;
 	glGenVertexArrays(1, &vao);
@@ -235,14 +235,32 @@ int main(void)
 	GLuint tex;
 	glCreateTextures(GL_TEXTURE_2D, 1, &tex);
 	glTextureStorage2D(tex, 1, GL_RGB8, im.width, im.height);
-	GLuint texUnit = {0};
 
+	GLuint texUnit = {0};
 	glTextureSubImage2D(tex, 0, 0, 0, im.width, im.height, GL_RGB, GL_UNSIGNED_BYTE, im.data);
 	glBindTextureUnit(texUnit, tex);
 
-	glEnable(GL_DEPTH_TEST);
 
+	//FrameBuffer
+	GLuint fbo;
+	glCreateFramebuffers(1, &fbo);
+
+	GLuint ct;
+	glCreateTextures(GL_TEXTURE_2D, 1, &ct);
+	glTextureStorage2D(ct, 1, GL_RGB8, width, height);
+
+	GLuint dt;
+	glCreateTextures(GL_TEXTURE_2D, 1, &dt);
+	glTextureStorage2D(dt, 1, GL_DEPTH_COMPONENT32F, width, height);
+
+	glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, ct, 0);
+	glNamedFramebufferTexture(fbo, GL_DEPTH_ATTACHMENT, dt, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	//Options
 	glPointSize(10.f);
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	while (!glfwWindowShouldClose(window))
@@ -257,6 +275,8 @@ int main(void)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
