@@ -171,49 +171,74 @@ int main(void)
 	// Callbacks
 	glDebugMessageCallback(opengl_error_callback, nullptr);
 
-
-	//const size_t nParticles = 1000;
-	//const auto particules = MakeParticles(nParticles);
-
-	const auto stlMesh = ReadStl("resources/models/logo.stl");
-
 	// Shader
 	const auto vertex = MakeShader(GL_VERTEX_SHADER, "resources/shaders/shaderStl.vert");
 	const auto fragment = MakeShader(GL_FRAGMENT_SHADER, "resources/shaders/shaderStl.frag");
 
-
-	const auto program = AttachAndLink({vertex, fragment});
-
+	// Program
+	const auto program = AttachAndLink({ vertex, fragment });
 	glUseProgram(program);
 
 
+	// Quads
+	//Vertices
+	float triangles[] = {
+		// positions          // colors           // texture coords
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+	};
+	//Indices
+	unsigned int indices[] = {
+		0, 1, 3, // first triangle
+		1, 2, 3  // second triangle
+	};
+
+
 	// Buffers
-	GLuint vbo, vao;
-	glGenBuffers(1, &vbo);
+	GLuint vao, vbo, ebo;
 	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &ebo);
 
 	glBindVertexArray(vao);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	glBufferData(GL_ARRAY_BUFFER, stlMesh.size() * sizeof(Triangle), stlMesh.data(), GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangles), triangles, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	
 	// Bindings
 	//Position
-	const auto index = glGetAttribLocation(program, "position");
-	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(index);
+	const auto indexPosition = glGetAttribLocation(program, "position");
+	glVertexAttribPointer(indexPosition, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
+	glEnableVertexAttribArray(indexPosition);
+
+	//Color
+	const auto indexColor = glGetAttribLocation(program, "color");
+	glVertexAttribPointer(indexColor, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+	glEnableVertexAttribArray(indexColor);
+
+	//UV
+	const auto indexTexUV = glGetAttribLocation(program, "texuv");
+	glVertexAttribPointer(indexTexUV, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+	glEnableVertexAttribArray(indexTexUV);
 
 
 	//Texture
-
 	const char *filename = "resources/images/tronc.jpg";
 	Image im = LoadImage(filename);
+
 	GLuint tex;
 	glCreateTextures(GL_TEXTURE_2D, 1, &tex);
 	glTextureStorage2D(tex, 1, GL_RGB8, im.width, im.height);
+	GLuint texUnit = {0};
 
-
+	glTextureSubImage2D(tex, 0, 0, 0, im.width, im.height, GL_RGB, GL_UNSIGNED_BYTE, im.data);
+	glBindTextureUnit(texUnit, tex);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -229,13 +254,15 @@ int main(void)
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
 
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glDrawArrays(GL_TRIANGLES, 0, stlMesh.size() * 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	stbi_image_free(im.data);
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
